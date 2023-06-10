@@ -18,12 +18,9 @@ def submit():
         bath=int(request.form['uiBathrooms'])
         loca=request.form['loc']
         ans=get_estimated_price(loca,sqft,bhk,bath)
-        return redirect(url_for('ans',ans=ans))
+        return render_template('index.html',ans="The approximate cost of buying a property will be {}".format(ans) +" lakhs")
+        
 
-@app.route('/ans/<int:ans>')
-def ans(ans):
-    pr=str(ans) +" lakhs"
-    return render_template('index.html',ans="The approximate cost of buying a property will be {}".format(ans))
     
 
 __locations = None
