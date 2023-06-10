@@ -14,7 +14,7 @@ def home():
 def submit():
     ans=0
     if request.method=='POST':
-        sqft=float(request.form['Squareft'])
+        sqft=int(request.form['Squareft'])
         bhk=int(request.form['uiBHK'])
         bath=int(request.form['uiBathrooms'])
         loca=request.form['loc']
