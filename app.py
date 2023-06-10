@@ -1,0 +1,76 @@
+from flask import Flask ,render_template,redirect,url_for,request
+import pandas as pd
+import numpy as np
+import json
+import pickle
+
+app=Flask(__name__)
+
+@app.route('/')
+def home():
+    return render_template("index.html")
+
+@app.route('/submit',methods=['GET','POST'])
+def submit():
+    if request.method=='POST':
+        sqft=float(request.form['Squareft'])
+        bhk=int(request.form['uiBHK'])
+        bath=int(request.form['uiBathrooms'])
+        loca=request.form['loc']
+        ans=get_estimated_price(loca,sqft,bhk,bath)
+        return redirect(url_for('ans',ans=ans))
+
+@app.route('/ans/<int:ans>')
+def ans(ans):
+    pr=str(ans) +" lakhs"
+    return render_template('index.html',ans=ans)
+    
+
+__locations = None
+__data_columns = None
+__model = None
+
+def get_estimated_price(location,sqft,bhk,bath):
+    try:
+        loc_index = __data_columns.index(location.lower())
+    except:
+        loc_index = -1
+
+    x = np.zeros(len(__data_columns))
+    x[0] = sqft
+    x[1] = bath
+    x[2] = bhk
+    if loc_index>=0:
+        x[loc_index] = 1
+
+    return round(__model.predict([x])[0],2)
+
+
+def load_saved_artifacts():
+    print("loading saved artifacts...start")
+    global  __data_columns
+    global __locations
+
+    with open("./artifacts/columns.json", "r") as f:
+        __data_columns = json.load(f)['data_columns']
+        __locations = __data_columns[3:]  # first 3 columns are sqft, bath, bhk
+
+    global __model
+    if __model is None:
+        with open('./artifacts/banglore_home_prices_model.pickle', 'rb') as f:
+            __model = pickle.load(f)
+    print("loading saved artifacts...done")
+
+def get_location_names():
+    return __locations
+
+def get_data_columns():
+    return __data_columns
+
+
+
+if __name__=="__main__":
+    load_saved_artifacts()
+    app.run(debug=True)
+
+
