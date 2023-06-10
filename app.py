@@ -48,25 +48,20 @@ def home():
 @app.route('/submit',methods=['GET','POST'])
 def submit():
     ans=0
-    if request.method=='POST':
-        sqft=int(request.form['Squareft'])
-        bhk=int(request.form['uiBHK'])
-        bath=int(request.form['uiBathrooms'])
-        loca=request.form['loc']
-        print(str(bhk)+" "+str(bath)+" "+str(sqft)+" "+loca)
-        ans=get_estimated_price(loca,sqft,bhk,bath)
-        print(ans)
+    content_type = request.headers.get('Content-Type')
+    print(content_type)
+    sqft=int(request.form['Squareft'])
+    bhk=int(request.form['uiBHK'])
+    bath=int(request.form['uiBathrooms'])
+    loca=request.form['loc']
+    print(str(bhk)+" "+str(bath)+" "+str(sqft)+" "+loca)
+    ans=get_estimated_price(loca,sqft,bhk,bath)
+    print(ans)
     return render_template('index.html',ans="The approximate cost of buying a property will be {}".format(ans) +" lakhs")
         
 
-def get_location_names():
-    return __locations
 
-def get_data_columns():
-    return __data_columns
-
-
-if __name__=="__main__":
+if __name__ == "__main__":
     load_saved_artifacts()
     app.run(debug=True)
 
