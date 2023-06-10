@@ -24,9 +24,23 @@ def load_saved_artifacts():
             __model = pickle.load(f)
     print("loading saved artifacts...done")
 
-def get_estimated_price(location,sqft,bhk,bath):
+@app.route('/')
+def home():
+    return render_template("index.html")
+
+
+@app.route('/submit',methods=['POST'])
+def submit():
+    ans=0
+    content_type = request.headers.get('Content-Type')
+    print(content_type)
+    print(request.form)
+    sqft=int(request.form['Squareft'])
+    bhk=int(request.form['uiBHK'])
+    bath=int(request.form['uiBathrooms'])
+    loca=request.form['loc']
     try:
-        loc_index = __data_columns.index(location.lower())
+        loc_index = __data_columns.index(loca.lower())
     except:
         loc_index = -1
 
@@ -37,25 +51,8 @@ def get_estimated_price(location,sqft,bhk,bath):
     if loc_index>=0:
         x[loc_index] = 1
 
-    return round(__model.predict([x])[0],2)
-
-
-@app.route('/')
-def home():
-    return render_template("index.html")
-
-
-@app.route('/submit',methods=['GET','POST'])
-def submit():
-    ans=0
-    content_type = request.headers.get('Content-Type')
-    print(content_type)
-    sqft=int(request.form['Squareft'])
-    bhk=int(request.form['uiBHK'])
-    bath=int(request.form['uiBathrooms'])
-    loca=request.form['loc']
+    ans=round(__model.predict([x])[0],2)
     print(str(bhk)+" "+str(bath)+" "+str(sqft)+" "+loca)
-    ans=get_estimated_price(loca,sqft,bhk,bath)
     print(ans)
     return render_template('index.html',ans="The approximate cost of buying a property will be {}".format(ans) +" lakhs")
         
