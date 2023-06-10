@@ -23,7 +23,7 @@ def submit():
 @app.route('/ans/<int:ans>')
 def ans(ans):
     pr=str(ans) +" lakhs"
-    return render_template('index.html',ans=ans)
+    return render_template('index.html',ans="The approximate cost of buying a property will be {}".format(ans))
     
 
 __locations = None
