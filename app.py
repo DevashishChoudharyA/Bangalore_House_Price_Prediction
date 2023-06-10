@@ -4,7 +4,7 @@ import numpy as np
 import json
 import pickle
 
-app=Flask(__name__)
+app=Flask(__name__,template_folder='templates')
 
 @app.route('/')
 def home():
@@ -18,7 +18,7 @@ def submit():
         bath=int(request.form['uiBathrooms'])
         loca=request.form['loc']
         ans=get_estimated_price(loca,sqft,bhk,bath)
-        return render_template('index.html',ans="The approximate cost of buying a property will be {}".format(ans) +" lakhs")
+        return render_template('/index.html',ans="The approximate cost of buying a property will be {}".format(ans) +" lakhs")
         
 
     
