@@ -12,16 +12,16 @@ def home():
 
 @app.route('/submit',methods=['GET','POST'])
 def submit():
+    ans=0
     if request.method=='POST':
         sqft=float(request.form['Squareft'])
         bhk=int(request.form['uiBHK'])
         bath=int(request.form['uiBathrooms'])
         loca=request.form['loc']
         ans=get_estimated_price(loca,sqft,bhk,bath)
-        return render_template('/index.html',ans="The approximate cost of buying a property will be {}".format(ans) +" lakhs")
+    return render_template('index.html',ans="The approximate cost of buying a property will be {}".format(ans) +" lakhs")
         
 
-    
 
 __locations = None
 __data_columns = None
