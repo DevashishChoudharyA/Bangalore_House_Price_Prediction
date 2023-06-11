@@ -12,7 +12,7 @@ This data science project series walks through step by step process of how to bu
 6. Python flask for http server
 7. HTML/CSS/Javascript for UI
 
-# Deploy this app to cloud (AWS EC2)
+
 Link to see the live deployment of the app: https://real-estate-price-prediction-romb.onrender.com
 
 
